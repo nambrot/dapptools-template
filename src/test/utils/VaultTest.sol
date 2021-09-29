@@ -6,14 +6,18 @@ import "../../Vault.sol";
 import "./Hevm.sol";
 
 contract User {
-    Vault internal vault;
+    Vault internal greeter;
 
-    constructor(address _vault) {
-        vault = Vault(_vault);
+    constructor(address _greeter) {
+        greeter = Vault(_greeter);
+    }
+
+    function greet(string memory greeting) public {
+        greeter.greet(greeting);
     }
 
     function gm() public {
-        vault.gm();
+        greeter.gm();
     }
 }
 
@@ -21,16 +25,16 @@ contract VaultTest is DSTest {
     Hevm internal constant hevm = Hevm(HEVM_ADDRESS);
 
     // contracts
-    Vault internal vault;
+    Vault internal greeter;
 
     // users
     User internal alice;
     User internal bob;
 
     function setUp() public virtual {
-        vault = new Vault();
-        vault.initialize(address(alice));
-        alice = new User(address(vault));
-        bob = new User(address(vault));
+        greeter = new Vault();
+        alice = new User(address(greeter));
+        bob = new User(address(greeter));
+        greeter.transferOwnership(address(alice));
     }
 }

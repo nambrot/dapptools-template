@@ -2,8 +2,6 @@
 pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "@openzeppelin/contracts/proxy/utils/Initializable.sol";
-import "@openzeppelin/contracts/interfaces/IERC20.sol";
 
 library Errors {
     string internal constant InvalidBlockNumber =
@@ -11,19 +9,19 @@ library Errors {
     string internal constant CannotGm = "cannot greet with gm";
 }
 
-
-contract Vault is Initializable, Ownable {
-    address public last;
-    function initialize(address owner) public initializer {
-        transferOwnership(owner);
-    }
-
-    function deposit(address token, uint256 amount) public onlyOwner {
-        IERC20 tokenC = IERC20(token);
-        tokenC.transferFrom(msg.sender, address(this), amount);
-    }
+contract Vault is Ownable {
+    string public greeting;
 
     function gm() public onlyOwner {
-        last = msg.sender;
+        require(block.number % 10 == 0, Errors.InvalidBlockNumber);
+        greeting = "gm";
     }
- }
+
+    function greet(string memory _greeting) public {
+        require(
+            keccak256(abi.encodePacked(_greeting)) != keccak256("gm"),
+            Errors.CannotGm
+        );
+        greeting = _greeting;
+    }
+}
