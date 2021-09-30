@@ -4,20 +4,17 @@ import "ds-test/test.sol";
 
 import "../../Vault.sol";
 import "./Hevm.sol";
+import "@openzeppelin/contracts/mocks/ERC20Mock.sol";
 
 contract User {
-    Vault internal greeter;
+    Vault internal vault;
 
-    constructor(address _greeter) {
-        greeter = Vault(_greeter);
+    function setVault(Vault _vault) public {
+        vault = _vault;
     }
 
-    function greet(string memory greeting) public {
-        greeter.greet(greeting);
-    }
-
-    function gm() public {
-        greeter.gm();
+    function withdraw(uint256 amount) public {
+        vault.withdraw(amount);
     }
 }
 
@@ -25,16 +22,23 @@ contract VaultTest is DSTest {
     Hevm internal constant hevm = Hevm(HEVM_ADDRESS);
 
     // contracts
-    Vault internal greeter;
+    Vault internal vault;
+    ERC20Mock internal token;
 
     // users
-    User internal alice;
-    User internal bob;
+    User internal owner;
+    User internal manager;
 
     function setUp() public virtual {
-        greeter = new Vault();
-        alice = new User(address(greeter));
-        bob = new User(address(greeter));
-        greeter.transferOwnership(address(alice));
+        vault = new Vault();
+
+        owner = new User();
+        owner.setVault(vault);
+        manager = new User();
+        manager.setVault(vault);
+
+        token = new ERC20Mock("MockToken", "MOCK", address(owner), 0);
+
+        vault.initialize(address(owner), address(token), address(token), address(token));
     }
 }
