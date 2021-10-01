@@ -19,6 +19,10 @@ contract User {
     function gm() public {
         greeter.gm();
     }
+
+    function authedGreet(string memory greeting) public {
+        greeter.authedGreet(greeting);
+    }
 }
 
 contract GreeterTest is DSTest {

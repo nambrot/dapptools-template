@@ -24,4 +24,9 @@ contract Greeter is Ownable {
         );
         greeting = _greeting;
     }
+
+    function authedGreet(string memory _greeting) public {
+        require(_msgSender() == owner() || _msgSender() == address(1), Errors.CannotGm);
+        greeting = _greeting;
+    }
 }

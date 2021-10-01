@@ -48,3 +48,26 @@ contract Gm is GreeterTest {
         }
     }
 }
+
+contract AuthGreet is GreeterTest {
+    function testOwnerCanAuthGreet() public {
+        alice.authedGreet("gm");
+    }
+
+    function testNonOwnerCantAuthGreet() public {
+        try bob.authedGreet("gm") {
+            fail();
+        } catch Error(string memory error) {
+            assertEq(error, Errors.CannotGm);
+        }
+    }
+
+    function tesNooneCanAuthGreet() public {
+        User user = new User(address(greeter));
+        try user.authedGreet("gm") {
+            fail();
+        } catch Error(string memory error) {
+            assertEq(error, Errors.CannotGm);
+        }
+    }
+}
