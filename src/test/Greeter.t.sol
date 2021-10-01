@@ -62,7 +62,7 @@ contract AuthGreet is GreeterTest {
         }
     }
 
-    function tesNooneCanAuthGreet() public {
+    function testNooneCanAuthGreet() public {
         User user = new User(address(greeter));
         try user.authedGreet("gm") {
             fail();
