@@ -12,19 +12,6 @@ library Errors {
 contract Greeter is Ownable {
     string public greeting;
 
-    function gm() public onlyOwner {
-        require(block.number % 10 == 0, Errors.InvalidBlockNumber);
-        greeting = "gm";
-    }
-
-    function greet(string memory _greeting) public {
-        require(
-            keccak256(abi.encodePacked(_greeting)) != keccak256("gm"),
-            Errors.CannotGm
-        );
-        greeting = _greeting;
-    }
-
     function authedGreet(string memory _greeting) public {
         require(_msgSender() == owner() || _msgSender() == address(1), Errors.CannotGm);
         greeting = _greeting;

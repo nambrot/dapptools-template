@@ -12,13 +12,13 @@ contract User {
         greeter = Greeter(_greeter);
     }
 
-    function greet(string memory greeting) public {
-        greeter.greet(greeting);
-    }
+    // function greet(string memory greeting) public {
+    //     greeter.greet(greeting);
+    // }
 
-    function gm() public {
-        greeter.gm();
-    }
+    // function gm() public {
+    //     greeter.gm();
+    // }
 
     function authedGreet(string memory greeting) public {
         greeter.authedGreet(greeting);
